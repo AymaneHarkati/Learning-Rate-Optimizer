@@ -29,7 +29,7 @@ lrs_finder.plot_loss()
 
 Pull requests are welcome. For major changes, please open an issue first
 to discuss what you would like to change.
-Plotly has some errors while loading.
+Plotly won't load the plot in colab.
 Please make sure to update tests as appropriate.
 
 ## License
