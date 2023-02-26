@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import codecs
 import os
 
-VERSION = '0.0.1'
+VERSION = 'v1'
 DESCRIPTION = 'Learning Rate Finder'
 LONG_DESCRIPTION = 'A package for findinf the learning rate for your deep learning model'
 
@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
     long_description=LONG_DESCRIPTION,
     packages=find_packages(),
-    install_requires=['tensorflow', 'keras', 'plotly'],
+    install_requires=['plotly'],
     keywords=['python', 'deep learning', 'AI', 'Optimization', 'tensor flow', 'keras'],
     classifiers=[
         "Development Status :: 1 - Planning",
