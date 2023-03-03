@@ -5,49 +5,43 @@ from keras.callbacks import LambdaCallback
 import plotly.offline as pyo
 import plotly.graph_objs as go
 # Set notebook mode to work in offline
-pyo.init_notebook_mode()
-import keras
-
 
 class OptimizedLR():
-    def __init__(self, mod, lr_end):
+    def __init__(self,mod, lr_end):
         self.model = mod
         self.lrs = []
         self.val_loss = []
         self.end_lr = lr_end
-
-    def on_epoch_end(self, batch, logs):
+    import keras
+    def on_epoch_end(self,batch, logs):
         lr = keras.backend.get_value(self.model.optimizer.lr)
         self.lrs.append(lr)
         self.val_loss.append(logs['val_loss'])
-        if len(self.val_loss) == 1:
-            return
-        if self.val_loss[-1] >= self.val_loss[-2]: #maybe change the decay of lr to an exp function
+        if len(self.val_loss) == 1 :
+            return 
+        if self.val_loss[-1] >= self.val_loss[-2]:
             lr = lr * 0.0002 ** (1 / 100)
             if lr <= self.end_lr:
-                self.model.stop_training = True
+                self.model.stop_training =True
             keras.backend.set_value(self.model.optimizer.lr, lr)
-        elif self.val_loss[-1] >= 1.03 * self.val_loss[-2]:
-            self.model.stop_training = True
-
-    def search(self, X_train, y_train, validation=None, epochs=5, batch=32):
+        elif self.val_loss[-1] >= 1.03* self.val_loss[-2]:
+            self.model.stop_training =True
+    def search(self, X_train,y_train, validation=None, epochs=5, batch=32):
         if validation == None:
-            raise Exception("Validation set should be included") # the validation should be Initialized at the call of this method
-            
+            raise Exception("Validation set should be included")
         cyclical_lr = tf.keras.callbacks.LambdaCallback(
-            on_epoch_end=lambda batch, logs: self.on_epoch_end(batch, logs))
-        self.model.fit(X_train, y_train, validation_data=validation, epochs=epochs, batch_size=batch,
-                       callbacks=[cyclical_lr])
-
-    def plot_loss(self):
+                    on_epoch_end=lambda batch, logs: self.on_epoch_end(batch, logs))
+        self.model.fit(X_train,y_train, validation_data=validation, epochs=epochs, batch_size=batch, callbacks=[cyclical_lr])
+        
+    def plot_loss(self, render):
         fig = go.Figure()
 
         sorted_lrs, sorted_val_loss = zip(*sorted(zip(self.lrs, self.val_loss)))
 
         fig.add_trace(
             go.Scatter(
-                x=sorted_lrs,
-                y=sorted_val_loss,
+                x=sorted_lrs, 
+                y=sorted_val_loss, 
                 mode='lines',
                 line=dict(width=3)
             )
@@ -85,4 +79,5 @@ class OptimizedLR():
         )
         fig.update_layout(template='plotly_dark')
 
-        fig.show()
+        fig.show(renderer=render)  
+        
