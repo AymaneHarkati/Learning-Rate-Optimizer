@@ -21,8 +21,8 @@ lrs_finder = OptimizedLR(model, 3e-6)
 
 # we search for the best lr, we need the validation_data to be passed
 lrs_finder.search(train_data,train_targets, validation=(test_data, test_targets), epochs= 10, batch=16)
-# we plot an interactive visualization of the validation loss and the learning rates
-lrs_finder.plot_loss()
+# we plot an interactive visualization of the validation loss and the learning rates, pass the type of render you use
+lrs_finder.plot_loss('colab')
 ```
 
 ## Contributing
